@@ -3,7 +3,7 @@
 
   var util = require('util'),
     _ = require('lodash'),
-    supertest = require('supertest'),
+    supertest = require('supertest-promised'),
     jwt = require('./jwt');
 
   module.exports = {

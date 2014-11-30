@@ -5,7 +5,7 @@
     util = require('util');
 
   function readKey(path) {
-    return fs.readFileSync(__dirname + util.format('/keys/%s', path));
+    return fs.readFileSync(__dirname + util.format('/%s', path));
   }
 
   module.exports = {

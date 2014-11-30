@@ -47,7 +47,10 @@
         // routers
         if (options.routers) {
           Object.keys(options.routers).forEach(function (key) {
-            app.use(key, options.routers[key]);
+            var route = options.routers[key];
+            (_.isArray(route) ? route : [route]).forEach(function (route) {
+              app.use(key, route);
+            });
           });
         }
 

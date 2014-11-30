@@ -9,9 +9,9 @@
   }
 
   module.exports = {
-    development: {
-      privateKey: readKey('development/private_key.pem'),
-      publicKey: readKey('development/public_key.pem')
+    test: {
+      privateKey: readKey('test/private_key.pem'),
+      publicKey: readKey('test/public_key.pem')
     },
     production: {
       publicKey: readKey('production/public_key.pem')

@@ -57,7 +57,7 @@
           Object.keys(options.routers).forEach(function (key) {
             var route = options.routers[key];
             (_.isArray(route) ? route : [route]).forEach(function (route) {
-              app.use(key, route);
+              app.use(key[0] === '/' ? key : '/' + key, route);
             });
           });
         }

@@ -1,0 +1,48 @@
+(function () {
+  'use strict';
+
+  var util = require('util'),
+    _ = require('lodash'),
+    supertest = require('supertest'),
+    jwt = require('./jwt');
+
+  module.exports = {
+    token: function (user) {
+      return jwt.sign(_.defaults({}, user || {}, {
+        user_id: user.user_id || user.id
+      }));
+    },
+
+    serve: function (server, context) {
+      var route = function (method, path) {
+          return server
+            .then(function (app) {
+              return supertest(app);
+            })
+            .then(function (app) {
+              app = app[method.toLowerCase()](path);
+
+              if (context) {
+                app = app.set('Authorization', 'Bearer ' + module.exports.token(context.user ? context.user.toJSON() : context.toJSON()));
+              }
+
+              return app;
+            });
+        },
+        retval = {
+          route: route
+        };
+
+      ['get', 'post', 'patch', 'put', 'delete'].forEach(function (method) {
+        retval[method] = function () {
+          var args = Array.prototype.slice.call(arguments);
+          return route(method, util.format.apply(util, args));
+        };
+      });
+      return retval;
+    }
+
+  };
+
+}());
+

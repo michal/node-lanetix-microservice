@@ -35,7 +35,7 @@
           return options.preAuthentication(app);
         } else if (options.preAuthentication && _.isArray(options.preAuthentication)) {
           options.preAuthentication.forEach(function (fn) {
-            fn(app);
+            app.use(fn(app));
           });
         }
       })
@@ -47,7 +47,7 @@
           return options.postAuthentication(app);
         } else if (options.postAuthentication && _.isArray(options.postAuthentication)) {
           options.postAuthentication.forEach(function (fn) {
-            fn(app);
+            app.use(fn(app));
           });
         }
       })

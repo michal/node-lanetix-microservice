@@ -33,6 +33,10 @@
         // pre-authentication
         if (options.preAuthentication && _.isFunction(options.preAuthentication)) {
           return options.preAuthentication(app);
+        } else if (options.preAuthentication && _.isArray(options.preAuthentication)) {
+          options.preAuthentication.forEach(function (fn) {
+            fn(app);
+          });
         }
       })
       .tap(function (app) {
@@ -41,6 +45,10 @@
         // post-authentication
         if (options.postAuthentication && _.isFunction(options.postAuthentication)) {
           return options.postAuthentication(app);
+        } else if (options.postAuthentication && _.isArray(options.postAuthentication)) {
+          options.postAuthentication.forEach(function (fn) {
+            fn(app);
+          });
         }
       })
       .tap(function (app) {

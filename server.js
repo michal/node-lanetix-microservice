@@ -11,7 +11,7 @@
 
   module.exports = function () {
     var args = Array.prototype.slice.call(arguments),
-      options = _.extend.apply(_, [config].concat(args));
+      options = _.extend.apply(_, [{}, config].concat(args));
 
     return Promise.resolve(express())
       .tap(function (app) {

@@ -6,12 +6,25 @@
     supertest = require('supertest-promised'),
     jwt = require('./jwt');
 
+  function extractUserFromContext(context) {
+    if (context.user && context.user.toJSON) {
+      return context.user.toJSON();
+    } else if (context.user) {
+      return context.user;
+    } else if (context.toJSON) {
+      return context.toJSON();
+    } else {
+      return context;
+    }
+  }
+
+  function generateToken(user) {
+    return jwt.sign(_.defaults({}, user || {}, {
+      user_id: user.user_id || user.id
+    }));
+  }
+
   module.exports = {
-    token: function (user) {
-      return jwt.sign(_.defaults({}, user || {}, {
-        user_id: user.user_id || user.id
-      }));
-    },
 
     serve: function (server, context) {
       var route = function (method, path) {
@@ -23,7 +36,7 @@
               app = app[method.toLowerCase()](path);
 
               if (context) {
-                app = app.set('Authorization', 'Bearer ' + module.exports.token(context.user ? context.user.toJSON() : context.toJSON()));
+                app = app.set('Authorization', 'Bearer ' + generateToken(extractUserFromContext(context)));
               }
 
               return app;

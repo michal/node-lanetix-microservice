@@ -68,6 +68,10 @@
           res.status(statusCode);
 
           if (app.get('options').isProduction || statusCode !== 500) {
+            if (statusCode === 500) {
+              // for Papertrail purposes.
+              console.error('Error: ', err);
+            }
             res.json({message: err.message});
           } else {
             next(err);
@@ -75,6 +79,4 @@
         });
       });
   };
-
 }());
-

@@ -1,17 +1,19 @@
 {
   "name": "lanetix-microservice",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Wrapper for writing JWT-authenticated microservices for internal use within Lanetix.",
   "author": "Lanetix <engineering@lanetix.com> (https://github.com/lanetix/)",
   "homepage": "https://github.com/lanetix/node-lanetix-microservice/",
   "bugs": "https://github.com/lanetix/node-lanetix-microservice/issues",
   "repository": "git://github.com/lanetix/node-lanetix-microservice.git",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/mit-license.php"
-    }
-  ],
+  "licenses": [{
+    "type": "MIT",
+    "url": "http://www.opensource.org/licenses/mit-license.php"
+  }],
+  "scripts": {
+    "lint": "bin/lint",
+    "test": "bin/test"
+  },
   "main": "./index.js",
   "dependencies": {
     "bluebird": "^2.3.11",
@@ -22,7 +24,13 @@
     "express-boom": "^0.3.0",
     "jsonwebtoken": "^1.1.2",
     "lodash": "^2.4.1",
-    "require-directory": "^2.0.0",
-    "supertest-promised": "^0.1.0"
+    "require-directory": "^2.0.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.5.10",
+    "mocha": "^2.0.1",
+    "node-mocks-http": "^1.2.1",
+    "should": "^4.3.0",
+    "sinon": "^1.12.2"
   }
 }

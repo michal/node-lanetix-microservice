@@ -1,5 +1,7 @@
-'use strict';
+(function () {
+  'use strict';
 
-module.exports = function(req, res) {
-  res.send(204);
-};
+  module.exports = function (req, res) {
+    res.status(204).send();
+  };
+}());

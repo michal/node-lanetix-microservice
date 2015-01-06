@@ -13,8 +13,8 @@
     }
   ],
   "scripts": {
-    "lint": "bin/lint",
-    "test": "bin/test"
+    "lint": "eslint --ignore-path .gitignore .",
+    "test": "mocha"
   },
   "main": "./index.js",
   "dependencies": {
@@ -31,7 +31,8 @@
     "supertest-promised": "^0.1.0"
   },
   "devDependencies": {
-    "jshint": "^2.5.10",
+    "eslint": "^0.11.0",
+    "eslint-plugin-nodeca": "^1.0.3",
     "mocha": "^2.0.1",
     "node-mocks-http": "^1.2.1",
     "should": "^4.3.0",

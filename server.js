@@ -25,6 +25,7 @@
         }
       })
       .tap(function (app) {
+        app.get('/health', middleware.health);
         app.use(bodyParser.json());
         app.use(boom());
         app.use(middleware.response(app));

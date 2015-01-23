@@ -5,6 +5,10 @@ var _ = require('lodash'),
   keys = require('./keys');
 
 module.exports.sign = function (payload, options, cert) {
+  if (!cert) {
+    console.warn('using test key to sign jwt');
+  }
+  
   return jwt.sign(
     payload || {},
     cert || keys.test.privateKey,

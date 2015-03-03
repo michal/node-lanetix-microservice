@@ -1,6 +1,6 @@
 {
   "name": "lanetix-microservice",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Wrapper for writing JWT-authenticated microservices for internal use within Lanetix.",
   "author": "Lanetix <engineering@lanetix.com> (https://github.com/lanetix/)",
   "homepage": "https://github.com/lanetix/node-lanetix-microservice/",
@@ -31,8 +31,8 @@
     "supertest-promised": "^0.1.0"
   },
   "devDependencies": {
-    "eslint": "^0.11.0",
-    "eslint-plugin-nodeca": "^1.0.3",
+    "eslint": "^0.15",
+    "eslint-plugin-nodeca": "^1",
     "mocha": "^2.0.1",
     "node-mocks-http": "^1.2.1",
     "should": "^4.3.0",

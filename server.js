@@ -72,7 +72,7 @@ module.exports = function () {
           if (statusCode === 500) {
             // for Papertrail purposes.
             var errorMsg = 'Error: ' + JSON.stringify(err);
-            errorMsg += req ? '\nUrl: ' + req.originalUrl + '\nBody: ' + req.body : '';
+            errorMsg += req ? '\nUrl: ' + req.originalUrl + '\nBody: ' + JSON.stringify(req.body) : '';
             console.error(errorMsg);
           }
           res.json({message: err.message});

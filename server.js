@@ -71,7 +71,7 @@ module.exports = function () {
         if (app.get('options').isProduction || statusCode !== 500) {
           if (statusCode === 500) {
             // for Papertrail purposes.
-            console.error('Error: ', err);
+            console.error('Error: ', err + '\nBody: ' + req.body);
           }
           res.json({message: err.message});
         } else {

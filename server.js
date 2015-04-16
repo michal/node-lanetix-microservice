@@ -64,21 +64,6 @@ module.exports = function () {
       }
 
       // error handler
-      app.use(function (err, req, res, next) {
-        var statusCode = err.statusCode || (err.output && err.output.statusCode) || 500;
-        res.status(statusCode);
-
-        if (app.get('options').isProduction || statusCode !== 500) {
-          if (statusCode === 500) {
-            // for Papertrail purposes.
-            var errorMsg = 'Error: ' + JSON.stringify(err);
-            errorMsg += req ? '\nUrl: ' + req.originalUrl + '\nBody: ' + JSON.stringify(req.body) : '';
-            console.error(errorMsg);
-          }
-          res.json({message: err.message});
-        } else {
-          next(err);
-        }
-      });
+      app.use(middleware.error(app));
     });
 };

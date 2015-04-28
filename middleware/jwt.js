@@ -22,8 +22,22 @@ module.exports = function (app) {
       })
       .then(next)
       .catch(function (err) {
-        console.error('Error verifying JWT: ', err);
-        next(boom.forbidden());
+        if (err && err instanceof jwt.TokenExpiredError) {
+          return res.format({
+            json: function () {
+              res.status(401).json({
+                error: 'TOKEN_EXPIRED'
+              });
+            },
+
+            html: function () {
+              next(err);
+            }
+          });
+        } else {
+          console.error('Error verifying JWT: ', err);
+          next(boom.forbidden());
+        }
       });
   };
 };

@@ -26,7 +26,7 @@ module.exports = function () {
     })
     .tap(function (app) {
       app.get('/health', middleware.health);
-      app.use(bodyParser.json({limit: '50mb'}));
+      app.use(bodyParser.json({limit: '5mb'}));
       app.use(boom());
       app.use(middleware.response(app));
       app.use(middleware.cors(app));

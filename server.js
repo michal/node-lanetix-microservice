@@ -4,7 +4,6 @@ var _ = require('lodash'),
   BPromise = require('bluebird'),
   express = require('express'),
   bodyParser = require('body-parser'),
-  cookieParser = require('cookie-parser'),
   boom = require('express-boom'),
   config = require('./config'),
   path = require('path'),
@@ -28,7 +27,6 @@ module.exports = function () {
     .tap(function (app) {
       app.get('/health', middleware.health);
       app.use(bodyParser.json({limit: '5mb'}));
-      app.use(cookieParser());
       app.use(boom());
       app.use(middleware.response(app));
       app.use(middleware.cors(app));

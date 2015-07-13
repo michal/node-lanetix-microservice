@@ -5,7 +5,7 @@ var util = require('util'),
   supertest = require('supertest-promised'),
   jwt = require('./jwt');
 
-function extractUserFromContext(context) {
+function extractUserFromContext (context) {
   if (context.user && context.user.toJSON) {
     return context.user.toJSON();
   } else if (context.user) {
@@ -17,7 +17,7 @@ function extractUserFromContext(context) {
   }
 }
 
-function generateToken(user) {
+function generateToken (user) {
   return jwt.sign(_.defaults({}, user || {}, {
     user_id: user.user_id || user.id
   }));

@@ -3,7 +3,7 @@
 var fs = require('fs'),
   path = require('path');
 
-function readKey(filepath) {
+function readKey (filepath) {
   return fs.readFileSync(path.join(__dirname, filepath));
 }
 

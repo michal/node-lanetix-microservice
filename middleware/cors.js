@@ -4,7 +4,10 @@ var cors = require('cors'),
   defaultExposedHeaders = [
     'X-Total-Count'
   ],
-  corsConfig = {};
+  corsConfig = {
+    credentials: true,
+    maxAge: 10 * 60 // this is the maximum we can cache in chrome
+  };
 
 module.exports = function (app) {
   var options = app.get('options');

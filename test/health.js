@@ -1,15 +1,17 @@
 'use strict';
 
-var supertest = require('supertest'),
-  server = require('../server')();
+var httpMocks = require('node-mocks-http'),
+  should = require('should'),
+  middleware = require('../middleware/health');
 
 describe('health check', function () {
   it('should 204 on health route', function (done) {
-    server.then(function (server) {
-      supertest(server)
-        .get('/health')
-        .expect(204, done);
-    })
-    .catch(done);
+    var req = httpMocks.createRequest(),
+      res = httpMocks.createResponse();
+
+    middleware(req, res);
+
+    res.should.have.property('statusCode', 204);
+    done();
   });
 });

@@ -2,7 +2,7 @@
 
 var util = require('util'),
   _ = require('lodash'),
-  supertest = require('supertest-promised'),
+  supertest = require('supertest-as-promised'),
   jwt = require('./jwt');
 
 function extractUserFromContext (context) {
@@ -27,31 +27,25 @@ module.exports = {
 
   serve: function (server, context) {
     var route = function (method, path) {
-        return server
-          .then(function (app) {
-            return supertest(app);
-          })
-          .then(function (app) {
-            app = app[method.toLowerCase()](path);
+      var app = supertest(server)
+      app = app[method.toLowerCase()](path);
 
-            if (context) {
-              app = app.set('Authorization', 'Bearer ' + generateToken(extractUserFromContext(context)));
-            }
+      if (context) {
+        app = app.set('Authorization', 'Bearer ' + generateToken(extractUserFromContext(context)));
+      }
 
-            return app;
-          });
-      },
-      retval = {
-        route: route
-      };
+      return app;
+     },
+     retval = {
+       route: route
+     };
 
-    ['get', 'post', 'patch', 'put', 'delete'].forEach(function (method) {
-      retval[method] = function () {
-        var args = Array.prototype.slice.call(arguments);
-        return route(method, util.format.apply(util, args));
-      };
-    });
-    return retval;
+   ['get', 'post', 'patch', 'put', 'delete'].forEach(function (method) {
+     retval[method] = function () {
+       var args = Array.prototype.slice.call(arguments);
+       return route(method, util.format.apply(util, args));
+     };
+   });
+   return retval;
   }
-
 };

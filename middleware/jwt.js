@@ -8,6 +8,7 @@ var BPromise = require('bluebird'),
 module.exports = function (app) {
   return function (req, res, next) {
     var token = (req.get('authorization') || '').substring('Bearer '.length);
+    req.encodedJwt = token;
 
     if (!token || !token.length) {
       return res.boom.unauthorized();

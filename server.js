@@ -1,17 +1,15 @@
 'use strict';
 
 var _ = require('lodash'),
-  express = require('express'),
   bodyParser = require('body-parser'),
   boom = require('express-boom'),
   config = require('./config'),
   path = require('path'),
   middleware = require('require-directory')(module, path.join(__dirname, 'middleware'));
 
-module.exports = function () {
-  var args = Array.prototype.slice.call(arguments),
-    options = _.extend.apply(_, [{}, config].concat(args)),
-    app = express();
+module.exports = function (app, options) {
+  _.extend(options, config)
+  options = _.extend(config, options)
 
   app.enable('trust proxy');
   app.disable('x-powered-by');

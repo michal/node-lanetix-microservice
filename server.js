@@ -17,7 +17,7 @@ module.exports = function (app, options) {
 
   // configure
   if (options.configure && _.isFunction(options.configure)) {
-    return options.configure(app);
+    options.configure(app);
   }
   app.get('/health', middleware.health);
   app.use(bodyParser.json({limit: '5mb'}));
@@ -27,7 +27,7 @@ module.exports = function (app, options) {
 
   // pre-authentication
   if (options.preAuthentication && _.isFunction(options.preAuthentication)) {
-    return options.preAuthentication(app);
+    options.preAuthentication(app);
   } else if (options.preAuthentication && _.isArray(options.preAuthentication)) {
     options.preAuthentication.forEach(function (fn) {
       app.use(fn(app));
@@ -37,7 +37,7 @@ module.exports = function (app, options) {
 
   // post-authentication
   if (options.postAuthentication && _.isFunction(options.postAuthentication)) {
-    return options.postAuthentication(app);
+    options.postAuthentication(app);
   } else if (options.postAuthentication && _.isArray(options.postAuthentication)) {
     options.postAuthentication.forEach(function (fn) {
       app.use(fn(app));

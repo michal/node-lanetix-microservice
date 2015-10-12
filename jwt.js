@@ -21,7 +21,7 @@ module.exports.sign = function (payload, options, cert) {
         audience: 'urn:lanetix/api',
         subject: 'test',
         iat: (new Date().getTime() / 1000),
-        expiresInMinutes: 2
+        expiresIn: 2 * 60
       }
     )
   );

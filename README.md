@@ -72,7 +72,7 @@ describe('Microservice tests', () => {
 
 ## Authorization
 
-In order to avoid a `401 unauthorized` response, an authentication token should be present on each request.
+In order to avoid a `401 unauthorized` response, an authorization token should be present on each request.
 
 ##### access_token (query string)
 

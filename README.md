@@ -69,3 +69,30 @@ describe('Microservice tests', () => {
   )
 })
 ```
+
+## Authorization
+
+In order to avoid a `401 unauthorized` response, an authorization token should be present on each request.
+
+##### access_token (query string)
+
+You'll need this for native get requests that aren't capable of putting headers on the request. These will be traditional
+anchor tags:
+
+`<a href ="http://localhost:5015/download/csv?access_token=accesstoken">`
+
+##### bearer token (request header)
+
+The bearer token approach will be the most common. API calls will employ this strategy:
+
+```js
+var request = {
+  method: 'POST',
+  url: 'http://localhost:5015/api/call',
+  headers: {
+    'Authorization': 'Bearer accesstoken' // this is the important part
+  }
+};
+
+// send request
+```

@@ -1,6 +1,6 @@
 {
   "name": "@lanetix/microservice",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Wrapper for writing JWT-authenticated microservices for internal use within Lanetix.",
   "author": "Lanetix <engineering@lanetix.com> (https://github.com/lanetix/)",
   "homepage": "https://github.com/lanetix/node-lanetix-microservice/",
@@ -22,7 +22,7 @@
     "body-parser": "^1.9.2",
     "boom": "^2.6.0",
     "cookie-parser": "^1.3.5",
-    "cors": "^2.5.2",
+    "cors": "^2.7.1",
     "express-boom": "^0.3.0",
     "jsonwebtoken": "^5.0.0",
     "lodash": "^2.4.1",

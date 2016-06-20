@@ -1,11 +1,11 @@
 'use strict';
 
 var cors = require('cors'),
+  isLanetix = /\.lanetix\.com$/i,
   defaultExposedHeaders = [
     'X-Total-Count'
   ],
   corsConfig = {
-    origin: /\.lanetix\.com$/i,
     credentials: true,
     maxAge: 10 * 60 // this is the maximum we can cache in chrome
   };
@@ -17,9 +17,17 @@ module.exports = function (app) {
   // specify allowed origins
   if (corsOrigin) {
     if (Array.isArray(corsOrigin)) {
-      corsConfig.origin = corsOrigin.concat([corsConfig.origin]); // don't mutate
-    } else if (typeof corsOrigin !== 'string' || !corsConfig.origin.test(corsOrigin)) {
-      corsConfig.origin = [corsOrigin, corsConfig.origin];
+      corsConfig.origin = [isLanetix].concat(corsOrigin);
+    } else if (typeof corsOrigin === 'function') {
+      corsConfig.origin = function (origin, callback) {
+        return isLanetix.test(origin)
+          ? callback(null, true)
+          : corsOrigin(origin, callback)
+      }
+    } else if (typeof corsOrigin !== 'string' || !isLanetix.test(corsOrigin)) {
+      corsConfig.origin = corsOrigin === '*'
+        ? corsOrigin
+        : [isLanetix, corsOrigin];
     }
   }
 

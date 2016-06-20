@@ -25,7 +25,9 @@ module.exports = function (app) {
           : corsOrigin(origin, callback)
       }
     } else if (typeof corsOrigin !== 'string' || !isLanetix.test(corsOrigin)) {
-      corsConfig.origin = [isLanetix, corsOrigin];
+      corsConfig.origin = corsOrigin === '*'
+        ? corsOrigin
+        : [isLanetix, corsOrigin];
     }
   }
 

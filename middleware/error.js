@@ -11,7 +11,7 @@ module.exports = function (app) {
         // for Papertrail purposes.
         var errorMsg = 'Error: ' + (err.stack || util.inspect(err, { depth: null }));
         errorMsg += req ? '\nUrl: ' + req.originalUrl + '\nBody: ' + util.inspect(req.body, { depth: null }) : '';
-        console.error(errorMsg);
+        req.error(errorMsg);
       }
       res.json({message: err.message});
     } else {

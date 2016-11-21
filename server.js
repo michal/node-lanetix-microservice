@@ -19,6 +19,7 @@ module.exports = function (app, options) {
   if (options.configure && _.isFunction(options.configure)) {
     options.configure(app);
   }
+  app.use(middleware.log);
   app.get('/health', middleware.health);
   app.use(bodyParser.json({limit: '5mb'}));
   app.use(boom());

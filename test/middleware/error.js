@@ -11,6 +11,8 @@ describe('middleware/error', function () {
   beforeEach(function () {
     req = httpMocks.createRequest();
     res = httpMocks.createResponse();
+
+    req.error = sinon.spy();
   });
 
   describe('in production', function () {
@@ -59,7 +61,7 @@ describe('middleware/error', function () {
         foo.foo = foo;
         err(foo, req, res, _.noop);
 
-        spyCall = console.error.getCall(0);
+        spyCall = req.error.getCall(0);
         message = spyCall.args[0];
         message.should.match(/^Error: \{ foo: \[Circular\] \}/);
       });
@@ -68,7 +70,7 @@ describe('middleware/error', function () {
         var spyCall, message;
         err(new Error('lol'), req, res, _.noop);
 
-        spyCall = console.error.getCall(0);
+        spyCall = req.error.getCall(0);
         message = spyCall.args[0];
         message.should.match(/^Error: Error: lol\s+at /);
       });
@@ -80,7 +82,7 @@ describe('middleware/error', function () {
 
         err({}, req, res, _.noop);
 
-        spyCall = console.error.getCall(0);
+        spyCall = req.error.getCall(0);
         message = spyCall.args[0];
         message.should.match(/Url: \/foo/);
       });
@@ -92,7 +94,7 @@ describe('middleware/error', function () {
 
         err({}, req, res, _.noop);
 
-        spyCall = console.error.getCall(0);
+        spyCall = req.error.getCall(0);
         message = spyCall.args[0];
         message.should.match(/Body: \{ foo: 'bar' \}/);
       });

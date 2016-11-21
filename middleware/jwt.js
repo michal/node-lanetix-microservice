@@ -37,7 +37,7 @@ module.exports = function (app) {
             }
           });
         } else {
-          console.error('Error verifying JWT: ', err);
+          req.error('Error verifying JWT: ', err);
           next(boom.forbidden());
         }
       });

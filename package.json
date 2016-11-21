@@ -1,6 +1,6 @@
 {
   "name": "@lanetix/microservice",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Wrapper for writing JWT-authenticated microservices for internal use within Lanetix.",
   "author": "Lanetix <engineering@lanetix.com> (https://github.com/lanetix/)",
   "homepage": "https://github.com/lanetix/node-lanetix-microservice/",

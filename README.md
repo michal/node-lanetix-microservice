@@ -42,6 +42,27 @@ httpServer.listen(port, () => {
 })
 ```
 
+## Logging
+
+Logging convenience methods are appended to the `request` object that automatically append the `x-request-id`, if available.
+
+### Available logging methods
+
+- error
+- info
+- log
+- warn
+
+### Usage
+
+```JavaScript
+module.exports = (req, res, next) {
+  req.error('oh no!')
+  next()
+  // output will be `> 12345 oh no!` where 12345 is the request id
+}
+```
+
 ## Testing
 
 The `test` client allows you to make requests to an in-memory version of your application. GET, POST, PATCH, PUT, and DELETE are supported HTTP verbs.

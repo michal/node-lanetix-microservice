@@ -8,8 +8,8 @@ var _ = require('lodash'),
   middleware = require('require-directory')(module, path.join(__dirname, 'middleware'));
 
 module.exports = function (app, options) {
-  _.extend(options, config)
-  options = _.extend(config, options)
+  _.extend(options, config);
+  options = _.extend(config, options);
 
   app.enable('trust proxy');
   app.disable('x-powered-by');
@@ -56,5 +56,5 @@ module.exports = function (app, options) {
   // error handler
   app.use(middleware.error(app));
 
-  return app
+  return app;
 };

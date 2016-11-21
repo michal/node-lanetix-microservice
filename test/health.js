@@ -1,7 +1,6 @@
 'use strict';
 
 var httpMocks = require('node-mocks-http'),
-  should = require('should'),
   middleware = require('../middleware/health');
 
 describe('health check', function () {

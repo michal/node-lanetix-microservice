@@ -27,7 +27,7 @@ module.exports = {
 
   serve: function (server, context) {
     var route = function (method, path) {
-      var app = supertest(server)
+      var app = supertest(server);
       app = app[method.toLowerCase()](path);
 
       if (context) {
@@ -35,17 +35,17 @@ module.exports = {
       }
 
       return app;
-     },
-     retval = {
-       route: route
-     };
+    },
+    retval = {
+      route: route
+    };
 
-   ['get', 'post', 'patch', 'put', 'delete'].forEach(function (method) {
-     retval[method] = function () {
-       var args = Array.prototype.slice.call(arguments);
-       return route(method, util.format.apply(util, args));
-     };
-   });
-   return retval;
+    ['get', 'post', 'patch', 'put', 'delete'].forEach(function (method) {
+      retval[method] = function () {
+        var args = Array.prototype.slice.call(arguments);
+        return route(method, util.format.apply(util, args));
+      };
+    });
+    return retval;
   }
 };

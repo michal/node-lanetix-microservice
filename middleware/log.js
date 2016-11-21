@@ -1,5 +1,7 @@
 'use strict';
 
+var METHODS = ['error', 'info', 'log', 'warn'];
+
 module.exports = function (req, res, next) {
   var buildArgs = function (args) {
     var requestId = req.headers['x-request-id'],
@@ -9,20 +11,14 @@ module.exports = function (req, res, next) {
     return response;
   };
 
-  req.error = function () {
-    var args = buildArgs(arguments);
-    console.error.apply(console, args);
-  };
-
-  req.log = function () {
-    var args = buildArgs(arguments);
-    console.log.apply(console, args);
-  };
-
-  req.warn = function () {
-    var args = buildArgs(arguments);
-    console.warn.apply(console, args);
-  };
+  METHODS.forEach(function (method) {
+    req[method] = function () {
+      var args = buildArgs(arguments);
+      console[method].apply(console, args);
+    };
+  });
 
   next();
 };
+
+module.exports.methods = METHODS;

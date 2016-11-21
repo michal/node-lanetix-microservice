@@ -7,7 +7,10 @@ module.exports = function (req, res, next) {
     var requestId = req.headers['x-request-id'],
       response = Array.prototype.slice.call(args);
 
-    response.unshift(requestId);
+    if (requestId) {
+      response.unshift(requestId);
+    }
+
     return response;
   };
 

@@ -2,8 +2,16 @@
 
 var BPromise = require('bluebird'),
   jwt = require('jsonwebtoken'),
+  jwksRsa = require('jwks-rsa'),
   boom = require('boom'),
-  verifyToken = BPromise.promisify(jwt.verify, jwt);
+  jwksRsaClient = jwksRsa({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: 'https://lanetix.auth0.com/.well-known/jwks.json'
+  }),
+  verifyToken = BPromise.promisify(jwt.verify, jwt),
+  getSigningKey = BPromise.promisify(jwksRsaClient.getSigningKey, jwksRsaClient);
 
 module.exports = function (app) {
   return function (req, res, next) {
@@ -15,10 +23,23 @@ module.exports = function (app) {
       return res.boom.unauthorized();
     }
 
-    verifyToken(token, app.get('options').jwtPublicKey, {
-        issuer: 'urn:lanetix/auth',
-        audience: 'urn:lanetix/api'
+    var user = BPromise.try(function () {
+        return verifyToken(token, app.get('options').jwtPublicKey, {
+            issuer: 'urn:lanetix/auth',
+            audience: 'urn:lanetix/api'
+          });
       })
+      .catch(function () {
+        var decodedToken = jwt.decode(token, { complete: true });
+        return getSigningKey(decodedToken.header.kid)
+          .then(function (key) {
+            return verifyToken(token, key.publicKey, {
+              algorithms: ['RS256']
+            })
+          });
+      });
+
+    BPromise.resolve(user)
       .then(function (user) {
         req.user = user;
       })

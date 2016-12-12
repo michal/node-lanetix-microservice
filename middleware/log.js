@@ -5,13 +5,19 @@ var METHODS = ['error', 'info', 'log', 'warn'];
 module.exports = function (req, res, next) {
   var buildArgs = function (args) {
     var requestId = req.headers['x-request-id'],
-      response = Array.prototype.slice.call(args);
+      user = req.user,
+      response = [];
 
     if (requestId) {
-      response.unshift(requestId);
+      response.push('req: ' + requestId);
     }
 
-    return response;
+    if (user) {
+      response.push('org: ' + user.organization_id);
+      response.push('user: ' + user.id);
+    }
+
+    return response.concat(Array.prototype.slice.call(args));
   };
 
   METHODS.forEach(function (method) {

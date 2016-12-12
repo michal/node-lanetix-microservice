@@ -14,7 +14,8 @@
   ],
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
-    "test": "mocha"
+    "mocha": "mocha --opts test/mocha.opts",
+    "test": "npm run lint && npm run mocha"
   },
   "main": "./index.js",
   "dependencies": {

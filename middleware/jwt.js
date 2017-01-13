@@ -1,9 +1,9 @@
 'use strict';
 
 var BPromise = require('bluebird'),
+  boom = require('boom'),
   jwt = require('jsonwebtoken'),
   jwksRsa = require('jwks-rsa'),
-  boom = require('boom'),
   jwksRsaClient = jwksRsa({
     cache: true,
     rateLimit: true,
@@ -35,7 +35,7 @@ module.exports = function (app) {
           .then(function (key) {
             return verifyToken(token, key.publicKey, {
               algorithms: ['RS256']
-            })
+            });
           });
       });
 

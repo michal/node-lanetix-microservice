@@ -6,7 +6,7 @@ var assert = require('assert'),
   httpMocks = require('node-mocks-http'),
   jwt = require('jsonwebtoken'),
   nock = require('nock'),
-  spy = require('sinon'),
+  sinon = require('sinon'),
   middleware = require('../../middleware/jwt'),
   keys = require('../../keys');
 
@@ -17,7 +17,7 @@ describe('jwt middleware', function () {
     app = express();
   });
 
-  it('should authenticate token and return user object on request', function (done) {
+  it.only('should authenticate token and return user object on request', function (done) {
     app.set('options', config);
 
     token = jwt.sign(
@@ -35,8 +35,17 @@ describe('jwt middleware', function () {
     );
 
     req = httpMocks.createRequest({
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
       cookies: {
         'XSRF-TOKEN': token
+      }
+    });
+
+    res = httpMocks.createResponse({
+      boom: {
+        unathorized: sinon.spy()
       }
     });
 
@@ -170,14 +179,14 @@ describe('jwt middleware', function () {
     });
 
     res = httpMocks.createResponse({
-      redirect: spy()
+      redirect: sinon.spy()
     });
 
     nock('https://lanetix.auth0.com')
     .get('/.well-known/jwks.json')
     .reply(200, jwks);
 
-    next = spy();
+    next = sinon.spy();
 
     var jwtMiddleware = middleware(app);
 

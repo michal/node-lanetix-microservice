@@ -19,7 +19,10 @@ module.exports = function (app) {
 
     req.encodedJwt = token;
 
+    console.log('token:', token)
+
     if (!token || !token.length) {
+      console.log('RESPONSEEEEEEE:', res);
       return res.boom.unauthorized();
     }
 
@@ -41,10 +44,12 @@ module.exports = function (app) {
 
     BPromise.resolve(user)
       .then(function (user) {
+        console.log('USER', user);
         req.user = user;
       })
       .then(next)
       .catch(function (err) {
+        console.log('IS THIS RUNNING?');
         if (err && err instanceof jwt.TokenExpiredError) {
           return res.format({
             json: function () {

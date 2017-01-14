@@ -17,7 +17,7 @@ describe('jwt middleware', function () {
     app = express();
   });
 
-  it.only('should authenticate token and return user object on request', function (done) {
+  it('should authenticate token and return user object on request', function (done) {
     app.set('options', config);
 
     token = jwt.sign(
@@ -106,6 +106,9 @@ describe('jwt middleware', function () {
     };
 
     req = httpMocks.createRequest({
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
       cookies: {
         'XSRF-TOKEN': token
       }
@@ -173,6 +176,9 @@ describe('jwt middleware', function () {
     };
 
     req = httpMocks.createRequest({
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
       cookies: {
         'XSRF-TOKEN': token
       }

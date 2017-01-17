@@ -12,6 +12,9 @@
       "url": "http://www.opensource.org/licenses/mit-license.php"
     }
   ],
+  "engines": {
+    "node": "^6.9.0"
+  },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
     "mocha": "mocha --opts test/mocha.opts",

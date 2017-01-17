@@ -8,6 +8,7 @@ var assert = require('assert'),
   nock = require('nock'),
   sinon = require('sinon'),
   middleware = require('../../middleware/jwt'),
+  boom = require('boom'),
   keys = require('../../keys');
 
 describe('jwt middleware', function () {
@@ -181,7 +182,8 @@ describe('jwt middleware', function () {
       },
       cookies: {
         'XSRF-TOKEN': token
-      }
+      },
+      error: sinon.spy()
     });
 
     res = httpMocks.createResponse({
@@ -192,14 +194,19 @@ describe('jwt middleware', function () {
     .get('/.well-known/jwks.json')
     .reply(200, jwks);
 
-    next = sinon.spy();
+    next = function (e) {
+      try {
+        assert.deepEqual(req.user, undefined);
+        assert.equal(req.error.calledOnce, true);
+        assert.deepEqual(e, boom.forbidden());
+      } catch (err) {
+        done(err);
+      }
+      done();
+    };
 
     var jwtMiddleware = middleware(app);
 
     jwtMiddleware(req, res, next);
-
-    assert.deepEqual(req.user, undefined);
-
-    done();
   });
 });

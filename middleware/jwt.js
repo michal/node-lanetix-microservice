@@ -6,6 +6,7 @@ var BPromise = require('bluebird'),
   jwksRsa = require('jwks-rsa'),
   jwksRsaClient = jwksRsa({
     cache: true,
+    cacheMaxAge: ms('5m'),
     rateLimit: true,
     jwksRequestsPerMinute: 5,
     jwksUri: 'https://lanetix.auth0.com/.well-known/jwks.json'

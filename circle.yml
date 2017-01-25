@@ -2,9 +2,6 @@ machine:
   node:
     version: 6.9
 
-general:
-  artifacts:
-
 test:
-  pre: 
+  pre:
     - npm run lint

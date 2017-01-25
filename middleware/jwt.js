@@ -4,6 +4,7 @@ var BPromise = require('bluebird'),
   boom = require('boom'),
   jwt = require('jsonwebtoken'),
   jwksRsa = require('jwks-rsa'),
+  ms = require('ms'),
   jwksRsaClient = jwksRsa({
     cache: true,
     cacheMaxAge: ms('5m'),

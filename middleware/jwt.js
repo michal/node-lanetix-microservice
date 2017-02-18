@@ -1,7 +1,6 @@
 'use strict';
 
 var BPromise = require('bluebird'),
-  boom = require('boom'),
   jwt = require('jsonwebtoken'),
   jwksRsa = require('jwks-rsa'),
   ms = require('ms'),
@@ -25,44 +24,32 @@ module.exports = function (app) {
       return res.boom.unauthorized();
     }
 
-    var user = BPromise.try(function () {
-        return verifyToken(token, app.get('options').jwtPublicKey, {
-            issuer: 'urn:lanetix/auth',
-            audience: 'urn:lanetix/api'
-          });
-      })
-      .catch(function () {
+    var expiredJwt = function (err) {
+      next(err);
+      return res.status(401).send({
+        error: 'TOKEN_EXPIRED'
+      });
+    };
+
+    var allowAccess = function (user) {
+      req.user = user;
+      next();
+    };
+
+    return verifyToken(token, app.get('options').jwtPublicKey)
+     .then(allowAccess)
+     .catch(jwt.TokenExpiredError, expiredJwt)
+     .catch(function () {
         var decodedToken = jwt.decode(token, { complete: true });
+       //Checks if this is an Auth0 & valid token
         return getSigningKey(decodedToken.header.kid)
-          .then(function (key) {
+         .then(function (key) {
             return verifyToken(token, key.publicKey, {
               algorithms: ['RS256']
             });
-          });
-      });
-
-    BPromise.resolve(user)
-      .then(function (user) {
-        req.user = user;
+          })
+         .then(allowAccess);
       })
-      .then(next)
-      .catch(function (err) {
-        if (err && err instanceof jwt.TokenExpiredError) {
-          return res.format({
-            json: function () {
-              res.status(401).json({
-                error: 'TOKEN_EXPIRED'
-              });
-            },
-
-            html: function () {
-              next(err);
-            }
-          });
-        } else {
-          req.error('Error verifying JWT: ', err);
-          next(boom.forbidden());
-        }
-      });
+      .catch(next);
   };
 };

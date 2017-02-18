@@ -9,7 +9,6 @@ var assert = require('assert'),
   sinon = require('sinon'),
   should = require('should'),
   middleware = require('../../middleware/jwt'),
-  boom = require('boom'),
   keys = require('../../keys');
 
 describe('jwt middleware', function () {
@@ -23,11 +22,10 @@ describe('jwt middleware', function () {
 
   before(function () {
     app = express();
+    app.set('options', config);
   });
 
   it('should authenticate token and return user object on request', function (done) {
-    app.set('options', config);
-
     token = jwt.sign(
       {
         id: 1234,
@@ -51,11 +49,7 @@ describe('jwt middleware', function () {
       }
     });
 
-    res = httpMocks.createResponse({
-      boom: {
-        unathorized: sinon.spy()
-      }
-    });
+    res = httpMocks.createResponse();
 
     next = function (e) {
       if (e) {
@@ -80,6 +74,7 @@ describe('jwt middleware', function () {
 
   // make auth1 fail and match public key to token
   it('should authenticate with authV2 when authV1 fails', function (done) {
+
     token = jwt.sign(
       {
         id: 5678,
@@ -196,8 +191,8 @@ describe('jwt middleware', function () {
       if (e) {
         try {
           should.not.exist(req.user);
-          assert.equal(req.error.calledOnce, true);
-          assert.deepEqual(e, boom.forbidden());
+          assert.equal(e.name, 'JsonWebTokenError');
+          assert.deepEqual(e.message, 'invalid signature');
           done();
         } catch (err) {
           done(err);
@@ -212,7 +207,7 @@ describe('jwt middleware', function () {
     jwtMiddleware(req, res, next);
   });
 
-  it('should deny access with expired token', function (done) {
+  it('should deny access with expired Auth0 token', function (done) {
     token = jwt.sign(
       {
         id: 91011,
@@ -277,4 +272,53 @@ describe('jwt middleware', function () {
 
     jwtMiddleware(mock.req, mock.res, next);
   });
+
+
+  it('should deny access with expired LX token', function (done) {
+    token = jwt.sign(
+      {
+        id: 19231,
+        exp: 1,
+        name: 'McPoopie'
+      },
+      keys.test.privateKey,
+      {
+        algorithm: 'RS256',
+        issuer: 'urn:lanetix/auth',
+        audience: 'urn:lanetix/api',
+        subject: 'makeToken'
+      }
+    );
+
+    req = httpMocks.createRequest({
+      headers: {
+        'Authorization': 'Bearer ' + token
+      },
+      cookies: {
+        'XSRF-TOKEN': token
+      }
+    });
+
+    res = httpMocks.createResponse();
+
+    next = function (e) {
+      if (e) {
+        try {
+          should.not.exist(req.user);
+          assert.equal(e.name, 'TokenExpiredError');
+          assert.equal(e.message, 'jwt expired');
+          done();
+        } catch (err) {
+          done(err);
+        }
+      }
+      else {
+        done();
+      }
+    };
+    var jwtMiddleware = middleware(app);
+
+    jwtMiddleware(req, res, next);
+  });
+
 });

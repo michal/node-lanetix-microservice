@@ -43,12 +43,12 @@ module.exports = function (app) {
         var decodedToken = jwt.decode(token, { complete: true });
        //Checks if this is an Auth0 & valid token
         return getSigningKey(decodedToken.header.kid)
-         .then(function (key) {
-            return verifyToken(token, key.publicKey, {
-              algorithms: ['RS256']
-            });
-          })
-         .then(allowAccess);
+        .then(function (key) {
+          return verifyToken(token, key.publicKey, {
+            algorithms: ['RS256']
+          });
+        })
+       .then(allowAccess);
       })
       .catch(next);
   };
